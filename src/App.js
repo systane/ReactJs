@@ -24,9 +24,26 @@ class App extends Component {
         this.setState({authorList: result});
       },
       (error) => {
-        console.log(error);
+        console.log({failedToLoadAuthors: error});
       }
     )
+  }
+
+
+  submitForm(event){
+    event.preventDefault();
+    fetch("http://localhost:8080/api/autores",{
+      method: "POST",
+      headers: {'Content-Type':'application/json'},
+      body:{nome: '', email: '', senha: ''}
+    })
+    //.then(res => res.json())
+    .then((result) => {
+      console.log(result);
+    }, (error) => {
+      console.log({failedToSaveAuthor: error});
+    })
+
   }
 
   render() {
@@ -59,7 +76,7 @@ class App extends Component {
         {/*Form*/}
         <div className="content" id="content">
           <div className="pure-form pure-form-aligned">
-            <form className="pure-form pure-form-aligned">
+            <form className="pure-form pure-form-aligned" onSubmit={this.submitForm} method="post">
               <div className="pure-control-group">
                 <label htmlFor="name">Name</label>
                 <input id="name" type="text" name="name" />
