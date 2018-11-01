@@ -6,7 +6,17 @@ class App extends Component {
 
   constructor() {
     super();
-    this.state = {authorList: []};
+    this.state = {
+      authorList: [],
+      name: '',
+      email: '',
+      password: ''
+    };
+
+    this.submitForm = this.submitForm.bind(this);
+    this.setName = this.setName.bind(this);
+    this.setEmail = this.setEmail.bind(this);
+    this.setPassword = this.setPassword.bind(this);
   }
 
 
@@ -18,10 +28,17 @@ class App extends Component {
   */
 
  componentDidMount(){
-    fetch("http://localhost:8888/api/autores")
+    fetch("http://localhost:8080/api/autores")
       .then(res => res.json()) /*.then(function(response) { return response.json(); }) res.json() --> retorna o body da response "parseado" como JSON*/
       .then((result) => {
-        this.setState({authorList: result});
+        this.setState({
+          authorList: result,
+          author: {
+            name:'',
+            email:'',
+            password:''
+          }
+        });
       },
       (error) => {
         console.log({failedToLoadAuthors: error});
@@ -35,7 +52,11 @@ class App extends Component {
     fetch("http://localhost:8080/api/autores",{
       method: "POST",
       headers: {'Content-Type':'application/json'},
-      body:{nome: '', email: '', senha: ''}
+      body:JSON.stringify({
+        nome: this.state.name, 
+        email: this.state.email, 
+        senha: this.state.password
+      })
     })
     //.then(res => res.json())
     .then((result) => {
@@ -44,6 +65,18 @@ class App extends Component {
       console.log({failedToSaveAuthor: error});
     })
 
+  }
+
+  setName(event){
+    this.setState({name: event.target.value});
+  }
+
+  setEmail(event){
+    this.setState({email: event.target.value});
+  }
+
+  setPassword(event){
+    this.setState({password: event.target.value});
   }
 
   render() {
@@ -79,15 +112,15 @@ class App extends Component {
             <form className="pure-form pure-form-aligned" onSubmit={this.submitForm} method="post">
               <div className="pure-control-group">
                 <label htmlFor="name">Name</label>
-                <input id="name" type="text" name="name" />
+                <input id="name" type="text" name="name" value={this.state.name} onChange={this.setName}/>
               </div>
               <div className="pure-control-group">
                 <label htmlFor="email">Email</label>
-                <input id="email" type="email" name="email" />
+                <input id="email" type="email" name="email" value={this.state.email} onChange={this.setEmail}/>
               </div>
               <div className="pure-control-group">
                 <label htmlFor="password">Password</label>
-                <input id="password" type="password" name="password" />
+                <input id="password" type="password" name="password" value={this.state.password} onChange={this.setPassword}/>
               </div>
               <div className="pure-control-group">
                 <label></label>

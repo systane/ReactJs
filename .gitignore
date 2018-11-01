@@ -10,6 +10,7 @@
 /build
 
 /extra-folders/
+extra_folder/
 
 # misc
 .DS_Store
