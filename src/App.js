@@ -31,14 +31,7 @@ class App extends Component {
     fetch("http://localhost:8080/api/autores")
       .then(res => res.json()) /*.then(function(response) { return response.json(); }) res.json() --> retorna o body da response "parseado" como JSON*/
       .then((result) => {
-        this.setState({
-          authorList: result,
-          author: {
-            name:'',
-            email:'',
-            password:''
-          }
-        });
+        this.setState({authorList: result});
       },
       (error) => {
         console.log({failedToLoadAuthors: error});
@@ -58,9 +51,10 @@ class App extends Component {
         senha: this.state.password
       })
     })
-    //.then(res => res.json())
-    .then((result) => {
-      console.log(result);
+    .then(res => res.json())
+    .then((updatedAuthorList) => {
+      console.log(this);
+      this.setState({authorList: updatedAuthorList});
     }, (error) => {
       console.log({failedToSaveAuthor: error});
     })
