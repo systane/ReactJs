@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './css/pure-min.css';
 import './css/side-menu.css';
 import FormInput from './components/FormInput';
+import FormSubmitButton from './components/FormSubmitButton';
 
 class App extends Component {
 
@@ -107,10 +108,7 @@ class App extends Component {
               <FormInput id="name" type="text" name="name" value={this.state.name} onChange={this.setName} label="Name"/>
               <FormInput id="email" type="text" name="email" value={this.state.email} onChange={this.setEmail} label="Email"/>
               <FormInput id="password" type="text" name="password" value={this.state.password} onChange={this.setPassword} label="Password"/>
-              <div className="pure-control-group">
-                <label></label>
-                <button type="submit" className="pure-button pure-button-primary">Submit</button>
-              </div>
+              <FormSubmitButton label="Submit"/>
             </form>
           </div>
 
