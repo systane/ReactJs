@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import './css/pure-min.css';
 import './css/side-menu.css';
 import SideMenu from './components/SideMenu';
-import { AuthorsForm, AuthorsTable } from './Author';
-
+import AuthorBox from './Author';
 class App extends Component {
 
   render() {
@@ -21,9 +20,7 @@ class App extends Component {
             <h1>Author</h1>
           </div>
         </div>
-
-        <AuthorsForm />
-        <AuthorsTable />
+        <AuthorBox/>
       </div>
     );
   }

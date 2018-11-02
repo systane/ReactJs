@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import FormInput from './components/FormInput';
 import FormSubmitButton from './components/FormSubmitButton';
 
-export class AuthorsForm extends Component {
+class AuthorsForm extends Component {
     constructor() {
         super();
         this.state = {
@@ -43,7 +43,7 @@ export class AuthorsForm extends Component {
         })
             .then(res => res.json())
             .then((updatedAuthorList) => {
-                this.setState({ authorList: updatedAuthorList });
+                this.props.callbackUpdateAuthorList(updatedAuthorList);
             }, (error) => {
                 console.log({ failedToSaveAuthor: error });
             })
@@ -63,29 +63,7 @@ export class AuthorsForm extends Component {
     }
 }
 
-export class AuthorsTable extends Component {
-    constructor() {
-        super();
-        this.state = { authorList: [] };
-    }
-    
-  /* 
-  lifecycle methods:
-    componentWillMount()   --> É invocada antes do componente ser renderizado no DOM pela primeira vez
-    componentDidMount()    --> É invocada logo após o componente ser renderizado no DOM pela primeira vez --> Normalmente utilizado para requisições assincronas, pois permitir primeiro renderizar o html e somente após atualizar o html com a resposta de alguma request realizada.
-    componentWillUnmount() --> É invocada logo após o componente ser desmontado - removido - do DOM
-  */
-    componentDidMount() {
-        fetch("http://localhost:8080/api/autores")
-            .then(res => res.json()) /*.then(function(response) { return response.json(); }) res.json() --> retorna o body da response "parseado" como JSON*/
-            .then(result => {
-                this.setState({ authorList: result });
-            },
-                (error) => {
-                    console.log({ failedToLoadAuthors: error });
-                }
-            )
-    }
+class AuthorsTable extends Component {
     render() {
         return (
             <div className="content" id="content">
@@ -99,7 +77,7 @@ export class AuthorsTable extends Component {
                         </thead>
                         <tbody>
                             {
-                                this.state.authorList.map(function (author) {
+                                this.props.authorList.map(function (author) {
                                     return (
                                         <tr key={author.id}>
                                             <td>{author.nome}</td>
@@ -111,6 +89,45 @@ export class AuthorsTable extends Component {
                         </tbody>
                     </table>
                 </div>
+            </div>
+        );
+    }
+}
+
+export default class AuthorBox extends Component {
+    constructor() {
+        super();
+        this.state = { authorList: [] };
+        this.updatedAuthorList = this.updatedAuthorList.bind(this);
+    }
+
+    /* 
+    lifecycle methods:
+      componentWillMount()   --> É invocada antes do componente ser renderizado no DOM pela primeira vez
+      componentDidMount()    --> É invocada logo após o componente ser renderizado no DOM pela primeira vez --> Normalmente utilizado para requisições assincronas, pois permitir primeiro renderizar o html e somente após atualizar o html com a resposta de alguma request realizada.
+      componentWillUnmount() --> É invocada logo após o componente ser desmontado - removido - do DOM
+    */
+    componentDidMount() {
+        fetch("http://localhost:8080/api/autores")
+            .then(res => res.json()) /*.then(function(response) { return response.json(); }) res.json() --> retorna o body da response "parseado" como JSON*/
+            .then(result => {
+                this.setState({ authorList: result });
+            },
+                (error) => {
+                    console.log({ failedToLoadAuthors: error });
+                }
+            )
+    }
+
+    updatedAuthorList(newAuthorList){
+        this.setState({authorList: newAuthorList});
+    }
+
+    render() {
+        return (
+            <div>
+                <AuthorsForm callbackUpdateAuthorList={this.updatedAuthorList}/>
+                <AuthorsTable authorList={this.state.authorList}/>
             </div>
         );
     }
