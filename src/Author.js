@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import FormInput from './components/FormInput';
 import FormSubmitButton from './components/FormSubmitButton';
+import HandlerError from './HandlerError';
 import PubSub from 'pubsub-js';
 
 class AuthorsForm extends Component {
@@ -33,6 +34,7 @@ class AuthorsForm extends Component {
 
     submitForm(event) {
         event.preventDefault();
+        PubSub.publish('clean-errors', {});
         fetch("http://localhost:8080/api/autores", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
@@ -42,21 +44,26 @@ class AuthorsForm extends Component {
                 senha: this.state.password
             })
         })
-            .then(res => res.json())
-            .then((updatedAuthorList) => {
+        .then(res => res.json())
+        .then((response) => {
+            if (response.status === 400) {
+                new HandlerError().publishError(response);
+            }
+            else {
+                var updatedAuthorList = response;
                 PubSub.publish('update-author-list', updatedAuthorList); //Publish a warning to communicate the components that are subscribed in the channel or topic that the authorList have been updated
-            }, (error) => {
-                console.log({ failedToSaveAuthor: error });
-            })
+                this.setState({name: '', email: '', password: ''});
+            }
+        })
     }
 
     render() {
         return (
             <div className="pure-form pure-form-aligned">
                 <form className="pure-form pure-form-aligned" onSubmit={this.submitForm} method="post">
-                    <FormInput id="name" type="text" name="name" value={this.state.name} onChange={this.setName} label="Name" />
+                    <FormInput id="nome" type="text" name="nome" value={this.state.name} onChange={this.setName} label="Name" />
                     <FormInput id="email" type="email" name="email" value={this.state.email} onChange={this.setEmail} label="Email" />
-                    <FormInput id="password" type="password" name="password" value={this.state.password} onChange={this.setPassword} label="Password" />
+                    <FormInput id="senha" type="password" name="senha" value={this.state.password} onChange={this.setPassword} label="Password" />
                     <FormSubmitButton label="Submit" />
                 </form>
             </div>
@@ -111,28 +118,30 @@ export default class AuthorBox extends Component {
         fetch("http://localhost:8080/api/autores")
             .then(res => res.json()) /*.then(function(response) { return response.json(); }) res.json() --> retorna o body da response "parseado" como JSON*/
             .then(result => {
-                this.setState({ authorList: result });
-            },
-                (error) => {
-                    console.log({ failedToLoadAuthors: error });
+                if (result.type === 'error') {
+                    new HandlerError().publishError(result.responseJSON);
                 }
-            )
-        
+                else {
+                    this.setState({ authorList: result });
+                }
+            })
+
+
         //Subscribe to the channel or topic interested and execute an action
-        PubSub.subscribe('update-author-list', function(channel, newAuthorList){
-            this.setState({authorList: newAuthorList});
+        PubSub.subscribe('update-author-list', function (channel, newAuthorList) {
+            this.setState({ authorList: newAuthorList });
         }.bind(this));
     }
 
-    updatedAuthorList(newAuthorList){
-        this.setState({authorList: newAuthorList});
+    updatedAuthorList(newAuthorList) {
+        this.setState({ authorList: newAuthorList });
     }
 
     render() {
         return (
             <div>
                 <AuthorsForm />
-                <AuthorsTable authorList={this.state.authorList}/>
+                <AuthorsTable authorList={this.state.authorList} />
             </div>
         );
     }
