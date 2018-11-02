@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import FormInput from './components/FormInput';
 import FormSubmitButton from './components/FormSubmitButton';
+import PubSub from 'pubsub-js';
 
 class AuthorsForm extends Component {
     constructor() {
@@ -43,7 +44,7 @@ class AuthorsForm extends Component {
         })
             .then(res => res.json())
             .then((updatedAuthorList) => {
-                this.props.callbackUpdateAuthorList(updatedAuthorList);
+                PubSub.publish('update-author-list', updatedAuthorList); //Publish a warning to communicate the components that are subscribed in the channel or topic that the authorList have been updated
             }, (error) => {
                 console.log({ failedToSaveAuthor: error });
             })
@@ -98,7 +99,6 @@ export default class AuthorBox extends Component {
     constructor() {
         super();
         this.state = { authorList: [] };
-        this.updatedAuthorList = this.updatedAuthorList.bind(this);
     }
 
     /* 
@@ -117,6 +117,11 @@ export default class AuthorBox extends Component {
                     console.log({ failedToLoadAuthors: error });
                 }
             )
+        
+        //Subscribe to the channel or topic interested and execute an action
+        PubSub.subscribe('update-author-list', function(channel, newAuthorList){
+            this.setState({authorList: newAuthorList});
+        }.bind(this));
     }
 
     updatedAuthorList(newAuthorList){
@@ -126,7 +131,7 @@ export default class AuthorBox extends Component {
     render() {
         return (
             <div>
-                <AuthorsForm callbackUpdateAuthorList={this.updatedAuthorList}/>
+                <AuthorsForm />
                 <AuthorsTable authorList={this.state.authorList}/>
             </div>
         );
