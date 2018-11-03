@@ -8,13 +8,16 @@ export default class FormInput extends Component {
             errorMessage: ''
         }
     }
-
+  
     render() {
+        var errorStyle = {
+            color: 'red'
+        };
         return (
             <div className="pure-control-group">
                 <label htmlFor={this.props.id}>{this.props.label}</label>
                 <input id={this.props.id} type={this.props.type} name={this.props.name} value={this.props.value} onChange={this.props.onChange} />
-                <span className="errorInput">{this.state.errorMessage}</span>
+                <span className="pure-form-message" style={errorStyle}>{this.state.errorMessage}</span>
             </div>
         );
     }

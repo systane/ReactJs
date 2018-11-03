@@ -59,8 +59,8 @@ class AuthorsForm extends Component {
 
     render() {
         return (
-            <div className="pure-form pure-form-aligned">
-                <form className="pure-form pure-form-aligned" onSubmit={this.submitForm} method="post">
+            <div className="pure-form pure-form-stacked">
+                <form className="pure-form pure-form-stacked" onSubmit={this.submitForm} method="post">
                     <FormInput id="nome" type="text" name="nome" value={this.state.name} onChange={this.setName} label="Name" />
                     <FormInput id="email" type="email" name="email" value={this.state.email} onChange={this.setEmail} label="Email" />
                     <FormInput id="senha" type="password" name="senha" value={this.state.password} onChange={this.setPassword} label="Password" />
