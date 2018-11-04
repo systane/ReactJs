@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import FormInput from './components/FormInput';
-import FormSubmitButton from './components/FormSubmitButton';
-import HandlerError from './HandlerError';
 import PubSub from 'pubsub-js';
+
+//Components
+import FormInput from './FormInput';
+import FormSubmitButton from './FormSubmitButton';
+import HandlerError from './HandlerError';
 
 class AuthorsForm extends Component {
     constructor() {
@@ -44,17 +46,17 @@ class AuthorsForm extends Component {
                 senha: this.state.password
             })
         })
-        .then(res => res.json())
-        .then((response) => {
-            if (response.status === 400) {
-                new HandlerError().publishError(response);
-            }
-            else {
-                var updatedAuthorList = response;
-                PubSub.publish('update-author-list', updatedAuthorList); //Publish a warning to communicate the components that are subscribed in the channel or topic that the authorList have been updated
-                this.setState({name: '', email: '', password: ''});
-            }
-        })
+            .then(res => res.json())
+            .then((response) => {
+                if (response.status === 400) {
+                    new HandlerError().publishError(response);
+                }
+                else {
+                    var updatedAuthorList = response;
+                    PubSub.publish('update-author-list', updatedAuthorList); //Publish a warning to communicate the components that are subscribed in the channel or topic that the authorList have been updated
+                    this.setState({ name: '', email: '', password: '' });
+                }
+            })
     }
 
     render() {
@@ -74,7 +76,7 @@ class AuthorsForm extends Component {
 class AuthorsTable extends Component {
     render() {
         return (
-            <div className="content" id="content">
+            <div>
                 <div>
                     <table className="pure-table">
                         <thead>
@@ -140,6 +142,9 @@ export default class AuthorBox extends Component {
     render() {
         return (
             <div>
+                <div className="header">
+                    <h1>Author Registration</h1>
+                </div>
                 <AuthorsForm />
                 <AuthorsTable authorList={this.state.authorList} />
             </div>
