@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import App from './App';
 import Home from './components/Home';
 import Author from './components/Author';
+import Book from './components/Book';
 
 import './index.css';
 
@@ -16,7 +17,7 @@ const routes = (
             <Route exact path="/" component={Home} />
             <Route path="/home" component={Home} />
             <Route path="/author" component={Author} />
-            {/* <Route path="/livro" component={LivroAdmin} /> */}
+            <Route path="/book" component={Book} />
         </Switch>
     </App>
 );

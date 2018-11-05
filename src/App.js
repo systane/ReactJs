@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './css/pure-min.css';
 import './css/side-menu.css';
 import SideMenu from './components/SideMenu';
-import Home from './components/Home';
 class App extends Component {
 
   render() {
