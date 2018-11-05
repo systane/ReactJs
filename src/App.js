@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './css/pure-min.css';
 import './css/side-menu.css';
 import SideMenu from './components/SideMenu';
-import AuthorBox from './Author';
+import AuthorBox from './components/Author';
 class App extends Component {
 
   render() {
