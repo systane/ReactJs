@@ -12,7 +12,6 @@ class App extends Component {
           <span></span>
         </a>
         <SideMenu />
-        <Home />
         {this.props.children}
       </div>
     );
