@@ -5,6 +5,7 @@ import PubSub from 'pubsub-js';
 import FormInput from './FormInput';
 import FormSubmitButton from './FormSubmitButton';
 import HandlerError from './HandlerError';
+import api from '../service/api';
 
 class AuthorsForm extends Component {
     constructor() {
@@ -37,7 +38,7 @@ class AuthorsForm extends Component {
     submitForm(event) {
         event.preventDefault();
         PubSub.publish('clean-errors', {});
-        fetch("http://localhost:8080/api/autores", {
+        fetch(api + "autores", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -117,7 +118,7 @@ export default class AuthorBox extends Component {
       componentWillUnmount() --> É invocada logo após o componente ser desmontado - removido - do DOM
     */
     componentDidMount() {
-        fetch("http://localhost:8080/api/autores")
+        fetch(api + "autores")
             .then(res => res.json()) /*.then(function(response) { return response.json(); }) res.json() --> retorna o body da response "parseado" como JSON*/
             .then(result => {
                 if (result.type === 'error') {

@@ -6,6 +6,7 @@ import FormInput from './FormInput';
 import SelectInput from './SelectInput';
 import FormSubmitButton from './FormSubmitButton';
 import HandlerError from './HandlerError';
+import api from '../service/api';
 
 class BooksForm extends Component {
     constructor() {
@@ -36,10 +37,10 @@ class BooksForm extends Component {
         this.setState({ authorId: event.target.value });
     }
 
-    submitForm(event) {
+    submitForm = (event) => {
         event.preventDefault();
         PubSub.publish('clean-errors', {});
-        fetch("http://localhost:8080/api/livros", {
+        fetch(api + "livros", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -115,7 +116,7 @@ export default class BooksBox extends Component {
     }
 
     componentDidMount() {
-        fetch("http://localhost:8080/api/livros")
+        fetch(api + "livros")
             .then(res => res.json())
             .then(result => {
                 if (result.type === 'error') {
@@ -132,7 +133,7 @@ export default class BooksBox extends Component {
         }.bind(this));
 
 
-        fetch("http://localhost:8080/api/autores")
+        fetch(api + "autores")
             .then(res => res.json())
             .then(result => {
                 if (result.type === 'error') {
