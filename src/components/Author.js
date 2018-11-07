@@ -35,7 +35,7 @@ class AuthorsForm extends Component {
         this.setState({ password: event.target.value });
     }
 
-    submitForm(event) {
+    submitForm = (event) => {
         event.preventDefault();
         PubSub.publish('clean-errors', {});
         fetch(api + "autores", {

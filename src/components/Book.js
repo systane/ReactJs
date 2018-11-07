@@ -9,11 +9,10 @@ import HandlerError from './HandlerError';
 import api from '../service/api';
 
 class BooksForm extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             bookList: [],
-            authorList: [],
             tittle: '',
             price: '',
             authorId: ''
@@ -68,7 +67,7 @@ class BooksForm extends Component {
                 <form className="pure-form pure-form-stacked" onSubmit={this.submitForm} method="post">
                     <FormInput id="titulo" type="text" name="titulo" value={this.state.tittle} onChange={this.setTittle} label="Tittle" />
                     <FormInput id="preco" type="number" min="0" max="10000" step="0.1" name="preco" value={this.state.price} onChange={this.setPrice} label="Price" />
-                    <SelectInput id="authorId" value={this.state.authorId} options={this.state.authorList} onChange={this.setAuthorId} label="Author" />
+                    <SelectInput id="authorId" value={this.state.authorId} options={this.props.authorList} onChange={this.setAuthorId} label="Author" />
                     <FormSubmitButton label="Submit" />
                 </form>
             </div>
@@ -93,10 +92,10 @@ class BooksTable extends Component {
                             {
                                 this.props.bookList.map(function (book) {
                                     return (
-                                        <tr key={book.id}>
+                                        <tr key={book.titulo}>
                                             <td>{book.titulo}</td>
                                             <td>{book.preco}</td>
-                                            <td>{book.autor}</td>
+                                            <td>{book.autor.nome}</td>
                                         </tr>
                                     );
                                 })
@@ -112,7 +111,10 @@ class BooksTable extends Component {
 export default class BooksBox extends Component {
     constructor() {
         super();
-        this.state = { bookList: [] };
+        this.state = { 
+            bookList: [],
+            authorList: []
+        };
     }
 
     componentDidMount() {
@@ -155,7 +157,7 @@ export default class BooksBox extends Component {
                 <div className="header">
                     <h1>Book Registration</h1>
                 </div>
-                <BooksForm />
+                <BooksForm authorList={this.state.authorList}/>
                 <BooksTable bookList={this.state.bookList} />
             </div>
         );
