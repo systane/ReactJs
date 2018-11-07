@@ -18,22 +18,13 @@ class BooksForm extends Component {
             authorId: ''
         };
 
-        this.submitForm = this.submitForm.bind(this);
-        this.setTittle = this.setTittle.bind(this);
-        this.setPrice = this.setPrice.bind(this);
-        this.setAuthorId = this.setAuthorId.bind(this);
+        
     }
 
-    setTittle(event) {
-        this.setState({ tittle: event.target.value });
-    }
-
-    setPrice(event) {
-        this.setState({ price: event.target.value });
-    }
-
-    setAuthorId(event) {
-        this.setState({ authorId: event.target.value });
+    updateProperty(inputName, event){
+        var propertyToUpdate = {};
+        propertyToUpdate[inputName] = event.target.value;
+        this.setState(propertyToUpdate);
     }
 
     submitForm = (event) => {
@@ -65,9 +56,9 @@ class BooksForm extends Component {
         return (
             <div className="pure-form pure-form-stacked">
                 <form className="pure-form pure-form-stacked" onSubmit={this.submitForm} method="post">
-                    <FormInput id="titulo" type="text" name="titulo" value={this.state.tittle} onChange={this.setTittle} label="Tittle" />
-                    <FormInput id="preco" type="number" min="0" max="10000" step="0.1" name="preco" value={this.state.price} onChange={this.setPrice} label="Price" />
-                    <SelectInput id="authorId" value={this.state.authorId} options={this.props.authorList} onChange={this.setAuthorId} label="Author" />
+                    <FormInput id="titulo" type="text" name="titulo" value={this.state.tittle} onChange={this.updateProperty.bind(this, 'tittle')} label="Tittle" />
+                    <FormInput id="preco" type="number" min="0" max="10000" step="0.1" name="preco" value={this.state.price} onChange={this.updateProperty.bind(this, 'price')} label="Price" />
+                    <SelectInput id="authorId" value={this.state.authorId} options={this.props.authorList} onChange={this.updateProperty.bind(this, 'authorId')} label="Author" />
                     <FormSubmitButton label="Submit" />
                 </form>
             </div>

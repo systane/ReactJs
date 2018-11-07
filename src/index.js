@@ -6,8 +6,8 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 //Components
 import App from './App';
 import Home from './components/Home';
-import Author from './components/Author';
-import Book from './components/Book';
+import AuthorBox from './components/Author';
+import BookBox from './components/Book';
 
 import './index.css';
 
@@ -16,8 +16,8 @@ const routes = (
         <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/home" component={Home} />
-            <Route path="/author" component={Author} />
-            <Route path="/book" component={Book} />
+            <Route path="/author" component={AuthorBox} />
+            <Route path="/book" component={BookBox} />
         </Switch>
     </App>
 );

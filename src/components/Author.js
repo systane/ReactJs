@@ -18,22 +18,14 @@ class AuthorsForm extends Component {
         };
 
         this.submitForm = this.submitForm.bind(this);
-        this.setName = this.setName.bind(this);
-        this.setEmail = this.setEmail.bind(this);
-        this.setPassword = this.setPassword.bind(this);
     }
 
-    setName(event) {
-        this.setState({ name: event.target.value });
+    updateProperty(inputName, event){
+        var propertyToUpdate = {};
+        propertyToUpdate[inputName] = event.target.value;
+        this.setState(propertyToUpdate);
     }
 
-    setEmail(event) {
-        this.setState({ email: event.target.value });
-    }
-
-    setPassword(event) {
-        this.setState({ password: event.target.value });
-    }
 
     submitForm = (event) => {
         event.preventDefault();
@@ -64,9 +56,9 @@ class AuthorsForm extends Component {
         return (
             <div className="pure-form pure-form-stacked">
                 <form className="pure-form pure-form-stacked" onSubmit={this.submitForm} method="post">
-                    <FormInput id="nome" type="text" name="nome" value={this.state.name} onChange={this.setName} label="Name" />
-                    <FormInput id="email" type="email" name="email" value={this.state.email} onChange={this.setEmail} label="Email" />
-                    <FormInput id="senha" type="password" name="senha" value={this.state.password} onChange={this.setPassword} label="Password" />
+                    <FormInput id="nome" type="text" name="nome" value={this.state.name} onChange={this.updateProperty.bind(this, 'name')} label="Name" />
+                    <FormInput id="email" type="email" name="email" value={this.state.email} onChange={this.updateProperty.bind(this, 'email')} label="Email" />
+                    <FormInput id="senha" type="password" name="senha" value={this.state.password} onChange={this.updateProperty.bind(this, 'password')} label="Password" />
                     <FormSubmitButton label="Submit" />
                 </form>
             </div>
